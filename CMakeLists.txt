@@ -4,9 +4,19 @@ project(push_swap C)
 set(CMAKE_CXX_STANDARD 89)
 
 include_directories(headers)
+include_directories(libraries/libft)
 
 set(LINK_LIBRARIES ${CMAKE_SOURCE_DIR}/libraries)
-set(SRCS
-        )
 
-add_executable(${PROJECT_NAME} main.c ${SRCS})
+set(SRC
+        sources/operations.c
+        sources/sorting.c
+        sources/utils.c
+        sources/utils_2.c
+)
+
+add_executable(checker checker.c ${SRC})
+add_executable(push_swap push_swap.c ${SRC})
+
+target_link_libraries(checker ${LINK_LIBRARIES}/libft/libft.a)
+target_link_libraries(push_swap ${LINK_LIBRARIES}/libft/libft.a)
