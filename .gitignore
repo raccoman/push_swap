@@ -3,3 +3,5 @@ cmake-build-debug
 .idea
 objects
 libraries/libft/*.o
+checker
+push_swap
