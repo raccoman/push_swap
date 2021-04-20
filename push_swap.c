@@ -1,9 +1,32 @@
 #include "headers/push_swap.h"
 
+int find_index_of_max(t_list *list)
+{
+	int max;
+	int index;
+	int i;
+
+	max = -2147483648;
+	index = 0;
+	i = 0;
+	while (list)
+	{
+		if ((*(int *)(list->data)) > max)
+		{
+			max = (*(int *)(list->data));
+			index = i;
+		}
+		list = list->next;
+		i++;
+	}
+	return (index);
+}
+
 void sort_list(t_list *a)
 {
 	t_list	*b;
 	int		size;
+	int		max_index;
 
 	b = NULL;
 	size = ft_lstsize(a);
@@ -21,8 +44,15 @@ void sort_list(t_list *a)
 			sort_5(&a, &b);
 		else
 			sort_n(&a, &b);
+		size = ft_lstsize(a);
 	}
-	exec_and_display("pa", &a, &b, ft_lstsize(b));
+	max_index = find_index_of_max(b);
+	size = ft_lstsize(b);
+	if (max_index <= size / 2)
+		exec_and_display("rb", NULL, &b, max_index);
+	else
+		exec_and_display("rra", NULL, &b, size - max_index);
+	exec_and_display("pa", &a, &b, size);
 }
 
 int	main(int narg, char *args[])
