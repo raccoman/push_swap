@@ -6,3 +6,4 @@ libraries/libft/*.o
 checker
 push_swap
 en.subject.pdf
+visualizer
