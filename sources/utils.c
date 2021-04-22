@@ -20,23 +20,23 @@ void	*clear_and_error(t_list *list, t_list *list2)
 	return (NULL);
 }
 
-int	is_cmnd(char *cmnd)
+int	is_cmd(char *cmd)
 {
-	return (!ft_strcmp(cmnd, "sa") || !ft_strcmp(cmnd, "ss")
-		|| !ft_strcmp(cmnd, "pa") || !ft_strcmp(cmnd, "pb")
-		|| !ft_strcmp(cmnd, "sb") || !ft_strcmp(cmnd, "ra")
-		|| !ft_strcmp(cmnd, "rb") || !ft_strcmp(cmnd, "rr")
-		|| !ft_strcmp(cmnd, "rra") || !ft_strcmp(cmnd, "rrb")
-		|| !ft_strcmp(cmnd, "rrr"));
+	return (!ft_strcmp(cmd, "sa") || !ft_strcmp(cmd, "ss")
+		|| !ft_strcmp(cmd, "pa") || !ft_strcmp(cmd, "pb")
+		|| !ft_strcmp(cmd, "sb") || !ft_strcmp(cmd, "ra")
+		|| !ft_strcmp(cmd, "rb") || !ft_strcmp(cmd, "rr")
+		|| !ft_strcmp(cmd, "rra") || !ft_strcmp(cmd, "rrb")
+		|| !ft_strcmp(cmd, "rrr"));
 }
 
-int	check_cmnds(t_list *cmnds)
+int	check_cmds(t_list *cmds)
 {
-	while (cmnds)
+	while (cmds)
 	{
-		if (!is_cmnd(cmnds->data))
+		if (!is_cmd(cmds->data))
 			return (0);
-		cmnds = cmnds->next;
+		cmds = cmds->next;
 	}
 	return (1);
 }
@@ -61,44 +61,17 @@ t_list	*check_duplicates(t_list *list)
 	return (safe);
 }
 
-static int find_max(t_list *list)
-{
-	int max;
-
-	max = -2147483648;
-	while (list)
-	{
-		if ((*(int *)(list->data)) > max)
-			max = (*(int *)(list->data));
-		list = list->next;
-	}
-	return (max);
-}
-
-static int find_min(t_list *list)
-{
-	int min;
-
-	min = 2147483647;
-	while (list)
-	{
-		if ((*(int *)(list->data)) < min)
-			min = (*(int *)(list->data));
-		list = list->next;
-	}
-	return (min);
-}
-
 int	check_sorted(t_list *a)
 {
-	int max;
-	int min;
+	int	max;
+	int	min;
 
 	max = find_max(a);
 	min = find_min(a);
 	while (a && a->next)
 	{
-		if ((!(*((int *)(a->data)) == max && *((int *)(a->next->data)) == min)) && *((int *)(a->data)) > *((int *)(a->next->data)))
+		if ((!(*((int *)(a->data)) == max && *((int *)(a->next->data)) == min))
+			&& *((int *)(a->data)) > *((int *)(a->next->data)))
 			return (0);
 		a = a->next;
 	}

@@ -1,45 +1,27 @@
 #include "headers/push_swap.h"
 
-static int find_index_of_min(t_list *list)
+void	finish_sorting(t_list *a, int size, int *median)
 {
-    int min;
-    int index;
-    int i;
+	int	min_index;
 
-    min = 2147483647;
-    index = 0;
-    i = 0;
-    while (list)
-    {
-        if ((*(int *)(list->data)) < min)
-        {
-            min = (*(int *)(list->data));
-            index = i;
-        }
-        list = list->next;
-        i++;
-    }
-    return (index);
+	if (size > 5)
+		free(median);
+	min_index = find_index_of_min(a);
+	if (min_index <= size / 2)
+		execute("ra", &a, NULL, min_index);
+	else
+		execute("rra", &a, NULL, size - min_index);
 }
 
-/*static void print_list(t_list *list)
-{
-	while (list)
-	{
-		printf("%d\n", *((int *)(list->data)));
-		list = list->next;
-	}
-}*/
-
-void sort_list(t_list *a)
+void	sort_list(t_list *a)
 {
 	t_list	*b;
 	int		size;
-	//int		max_index;
+	int		*median;
 
 	b = NULL;
 	size = ft_lstsize(a);
-	if ((!b && check_sorted(a)) || size == 1)
+	if (check_sorted(a) || size == 1)
 		return ;
 	while (!check_sorted(a))
 	{
@@ -52,23 +34,19 @@ void sort_list(t_list *a)
 		else if (size == 5)
 			sort_5(&a, &b);
 		else
-			sort_n(&a, &b);
+			median = sort_n(&a, &b);
 		size = ft_lstsize(a);
 	}
-	int quicker = find_index_of_min(a);
-	if (quicker <= size / 2)
-		exec_and_display("ra", &a, NULL, quicker);
-	else
-		exec_and_display("rra", &a, NULL, size - quicker);
+	finish_sorting(a, size, median);
 }
 
-int	main(int narg, char *args[])
+int	main(int argc, char *argv[])
 {
 	t_list	*list;
 
-	if (narg == 1)
+	if (argc == 1)
 		return (1);
-	list = parse_args(narg, args);
+	list = parse_args(argc, argv);
 	if (!list)
 		return (1);
 	sort_list(list);

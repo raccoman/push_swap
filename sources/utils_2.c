@@ -1,6 +1,6 @@
 #include "push_swap.h"
 
-t_list	*parse_args(int narg, char *args[])
+t_list	*parse_args(int argc, char *argv[])
 {
 	t_list	*list;
 	int		i;
@@ -9,11 +9,11 @@ t_list	*parse_args(int narg, char *args[])
 
 	list = NULL;
 	i = 0;
-	while (++i < narg)
+	while (++i < argc)
 	{
-		if (ft_is_num(args[i]) && ft_is_int(ft_atol(args[i])))
+		if (ft_is_num(argv[i]) && ft_is_int(ft_atol(argv[i])))
 		{
-			tmp = ft_atol(args[i]);
+			tmp = ft_atol(argv[i]);
 			data = malloc(sizeof(int));
 			*data = (int)tmp;
 			ft_lstadd_back(&list, ft_lstnew(data));
@@ -24,22 +24,35 @@ t_list	*parse_args(int narg, char *args[])
 	return (check_duplicates(list));
 }
 
-void	dispatcher(char *cmnd, t_list **a, t_list **b)
+void	dispatcher(char *cmd, t_list **a, t_list **b)
 {
-	if (!ft_strcmp(cmnd, "sa") || !ft_strcmp(cmnd, "ss"))
+	if (!ft_strcmp(cmd, "sa") || !ft_strcmp(cmd, "ss"))
 		swap(*a);
-	if (!ft_strcmp(cmnd, "sb") || !ft_strcmp(cmnd, "ss"))
+	if (!ft_strcmp(cmd, "sb") || !ft_strcmp(cmd, "ss"))
 		swap(*b);
-	if (!ft_strcmp(cmnd, "pa"))
+	if (!ft_strcmp(cmd, "pa"))
 		push(a, b);
-	if (!ft_strcmp(cmnd, "pb"))
+	if (!ft_strcmp(cmd, "pb"))
 		push(b, a);
-	if (!ft_strcmp(cmnd, "ra") || !ft_strcmp(cmnd, "rr"))
+	if (!ft_strcmp(cmd, "ra") || !ft_strcmp(cmd, "rr"))
 		rotate(a);
-	if (!ft_strcmp(cmnd, "rb") || !ft_strcmp(cmnd, "rr"))
+	if (!ft_strcmp(cmd, "rb") || !ft_strcmp(cmd, "rr"))
 		rotate(b);
-	if (!ft_strcmp(cmnd, "rra") || !ft_strcmp(cmnd, "rrr"))
+	if (!ft_strcmp(cmd, "rra") || !ft_strcmp(cmd, "rrr"))
 		rev_rotate(a);
-	if (!ft_strcmp(cmnd, "rrb") || !ft_strcmp(cmnd, "rrr"))
+	if (!ft_strcmp(cmd, "rrb") || !ft_strcmp(cmd, "rrr"))
 		rev_rotate(b);
+}
+
+void	execute(char *cmd, t_list **a, t_list **b, int times)
+{
+	int	i;
+
+	i = -1;
+	while (++i < times)
+	{
+		write(1, cmd, ft_strlen(cmd));
+		write(1, "\n", 1);
+		dispatcher(cmd, a, b);
+	}
 }

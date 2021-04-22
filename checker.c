@@ -12,26 +12,15 @@
 
 #include "headers/push_swap.h"
 
-/*
-**void print_list(t_list *list)
-**{
-**	while (list)
-**	{
-**		printf("%d\n", *((int *)(list->data)));
-**		list = list->next;
-**	}
-**}
-*/
-
-void	execute_cmnds(t_list *a, t_list *cmnds)
+void	execute_cmds(t_list *a, t_list *cmds)
 {
 	t_list	*b;
 
 	b = NULL;
-	while (cmnds)
+	while (cmds)
 	{
-		dispatcher(cmnds->data, &a, &b);
-		cmnds = cmnds->next;
+		dispatcher(cmds->data, &a, &b);
+		cmds = cmds->next;
 	}
 	if (b || !check_sorted(a))
 	{
@@ -43,26 +32,26 @@ void	execute_cmnds(t_list *a, t_list *cmnds)
 		write(1, "OK\n", 3);
 }
 
-int	main(int narg, char *args[])
+int	main(int argc, char *argv[])
 {
 	t_list	*list;
-	t_list	*cmnds;
+	t_list	*cmds;
 	char	*tmp;
 
-	if (narg == 1)
+	if (argc == 1)
 		return (1);
-	list = parse_args(narg, args);
+	list = parse_args(argc, argv);
 	if (!list)
 		return (1);
 	while (ft_gnl(0, &tmp) > 0)
-		ft_lstadd_back(&cmnds, ft_lstnew(tmp));
+		ft_lstadd_back(&cmds, ft_lstnew(tmp));
 	free(tmp);
-	if (!check_cmnds(cmnds))
+	if (!check_cmds(cmds))
 	{
-		clear_and_error(list, cmnds);
+		clear_and_error(list, cmds);
 		return (1);
 	}
-	execute_cmnds(list, cmnds);
-	ft_lstclear(&cmnds);
+	execute_cmds(list, cmds);
+	ft_lstclear(&cmds);
 	ft_lstclear(&list);
 }

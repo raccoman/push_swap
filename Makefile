@@ -40,6 +40,8 @@ LIBFT =			libft.a
 #Files
 FILES =			operations.c \
 				sorting.c \
+				sorting_utils.c \
+				sort_n_utils.c \
 				utils.c \
 				utils_2.c \
 
@@ -77,7 +79,7 @@ clean:
 
 fclean: clean
 	@$(MAKE_FCLEAN) $(LIBFT_DIR)
-	@$(RM) $(NAME)
+	@$(RM) $(NAME_1) $(NAME_2)
 
 re: fclean all
 
