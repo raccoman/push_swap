@@ -61,11 +61,44 @@ t_list	*check_duplicates(t_list *list)
 	return (safe);
 }
 
+static int find_max(t_list *list)
+{
+	int max;
+
+	max = -2147483648;
+	while (list)
+	{
+		if ((*(int *)(list->data)) > max)
+			max = (*(int *)(list->data));
+		list = list->next;
+	}
+	return (max);
+}
+
+static int find_min(t_list *list)
+{
+	int min;
+
+	min = 2147483647;
+	while (list)
+	{
+		if ((*(int *)(list->data)) < min)
+			min = (*(int *)(list->data));
+		list = list->next;
+	}
+	return (min);
+}
+
 int	check_sorted(t_list *a)
 {
+	int max;
+	int min;
+
+	max = find_max(a);
+	min = find_min(a);
 	while (a && a->next)
 	{
-		if (*((int *)(a->data)) > *((int *)(a->next->data)))
+		if ((!(*((int *)(a->data)) == max && *((int *)(a->next->data)) == min)) && *((int *)(a->data)) > *((int *)(a->next->data)))
 			return (0);
 		a = a->next;
 	}

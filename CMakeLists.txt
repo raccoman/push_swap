@@ -15,7 +15,7 @@ set(SRC
         sources/utils_2.c
 )
 
-add_executable(checker checker.c ${SRC})
+add_executable(checker ./sources/checker.c ${SRC})
 add_executable(push_swap push_swap.c ${SRC})
 
 target_link_libraries(checker ${LINK_LIBRARIES}/libft/libft.a)

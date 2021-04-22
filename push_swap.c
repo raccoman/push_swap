@@ -1,32 +1,41 @@
 #include "headers/push_swap.h"
 
-int find_index_of_max(t_list *list)
+static int find_index_of_min(t_list *list)
 {
-	int max;
-	int index;
-	int i;
+    int min;
+    int index;
+    int i;
 
-	max = -2147483648;
-	index = 0;
-	i = 0;
+    min = 2147483647;
+    index = 0;
+    i = 0;
+    while (list)
+    {
+        if ((*(int *)(list->data)) < min)
+        {
+            min = (*(int *)(list->data));
+            index = i;
+        }
+        list = list->next;
+        i++;
+    }
+    return (index);
+}
+
+/*static void print_list(t_list *list)
+{
 	while (list)
 	{
-		if ((*(int *)(list->data)) > max)
-		{
-			max = (*(int *)(list->data));
-			index = i;
-		}
+		printf("%d\n", *((int *)(list->data)));
 		list = list->next;
-		i++;
 	}
-	return (index);
-}
+}*/
 
 void sort_list(t_list *a)
 {
 	t_list	*b;
 	int		size;
-	int		max_index;
+	//int		max_index;
 
 	b = NULL;
 	size = ft_lstsize(a);
@@ -36,23 +45,21 @@ void sort_list(t_list *a)
 	{
 		if (size == 2)
 			sort_2(a);
-		if (size == 3)
+		else if (size == 3)
 			sort_3(&a);
-		if (size == 4)
+		else if (size == 4)
 			sort_4(&a, &b);
-		if (size == 5)
+		else if (size == 5)
 			sort_5(&a, &b);
 		else
 			sort_n(&a, &b);
 		size = ft_lstsize(a);
 	}
-	max_index = find_index_of_max(b);
-	size = ft_lstsize(b);
-	if (max_index <= size / 2)
-		exec_and_display("rb", NULL, &b, max_index);
+	int quicker = find_index_of_min(a);
+	if (quicker <= size / 2)
+		exec_and_display("ra", &a, NULL, quicker);
 	else
-		exec_and_display("rra", NULL, &b, size - max_index);
-	exec_and_display("pa", &a, &b, size);
+		exec_and_display("rra", &a, NULL, size - quicker);
 }
 
 int	main(int narg, char *args[])

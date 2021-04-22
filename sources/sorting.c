@@ -43,19 +43,54 @@ void	sort_3(t_list **a)
 		exec_and_display("rra", a, NULL, 1);
 }
 
+static int find_index_of_min(t_list *list)
+{
+    int min;
+    int index;
+    int i;
+
+    min = 2147483647;
+    index = 0;
+    i = 0;
+    while (list)
+    {
+        if ((*(int *)(list->data)) < min)
+        {
+            min = (*(int *)(list->data));
+            index = i;
+        }
+        list = list->next;
+        i++;
+    }
+    return (index);
+}
+
 int find_index(t_list *list, int num)
 {
-	int index;
-
-	index = 0;
-	while (list)
+	int		start;
+	int		i;
+	t_list	*iter;
+	
+	start = find_index_of_min(list);
+	iter = list;
+	i = -1;
+	while (++i < start)
+		iter = iter->next;
+	while (1)
 	{
-		if (*((int *)(list->data)) > num)
-			break ;
-		index++;
-		list = list->next;
+		if (*((int *)(iter->data)) > num)
+			return (i);
+		i++;
+		iter = iter->next;
+		if (!iter)
+	 	{
+			iter = list;
+			i = 0;
+		}
+		if (i == start)
+			return (start);
 	}
-	return (index);
+	return (i);
 }
 
 void insert_sorted(t_list **a, t_list **b, int size)
@@ -65,19 +100,13 @@ void insert_sorted(t_list **a, t_list **b, int size)
 	while (*b)
 	{
 		index = find_index(*a, *((int *)((*b)->data)));
-		if (index < (size / 2))
+		if (index <= (size / 2))
 			exec_and_display("ra", a, NULL, index - 1);
 		else
 			exec_and_display("rra", a, NULL, (size - index));
 		exec_and_display("pa", a, b, 1);
-		if (index <= (size / 2))
-		{
-			if (index != 0)
-				exec_and_display("sa", a, NULL, 1);
-			exec_and_display("rra", a, NULL, index - 1);
-		}
-		else
-			exec_and_display("ra", a, NULL, (size - index + 1));
+		if (index && index <= (size / 2))
+			exec_and_display("sa", a, NULL, 1);
 		size++;
 	}
 }
@@ -96,7 +125,7 @@ void	sort_5(t_list **a, t_list **b)
 	insert_sorted(a, b, 3);
 }
 
-int find_max(t_list *list)
+static int find_max(t_list *list)
 {
 	int max;
 
@@ -110,7 +139,7 @@ int find_max(t_list *list)
 	return (max);
 }
 
-int find_min(t_list *list)
+static int find_min(t_list *list)
 {
 	int min;
 
@@ -124,7 +153,7 @@ int find_min(t_list *list)
 	return (min);
 }
 
-int find_quicker(t_list *a, int median, int size)
+int find_quicker(t_list *a, int median, int last_sorted, int size)
 {
 	int first = -1;
 	int last = -1;
@@ -132,7 +161,7 @@ int find_quicker(t_list *a, int median, int size)
 
 	while (++i < size)
 	{
-		if (*(int *)(a->data) <= median)
+		if (*(int *)(a->data) <= median && *(int *)(a->data) > last_sorted)
 		{
 			if (i <= size / 2 && first == -1)
 				first = i;
@@ -151,74 +180,114 @@ int find_quicker(t_list *a, int median, int size)
 		return (first);
 	return (last);
 }
+#include <stdio.h>
 
-int find_index_2(t_list *list, int num, int b_max, int b_min)
+int find_lowest(t_list *a, t_list *b, int a_size, int b_size)
 {
-	int index;
-	int prec;
-	int succ;
+	int	min_moves;
+	int	best_choice;
+	int	current_moves;
+	int	b_index;
+	int	a_index;
 
-	if (!list)
-		return (0);
-	if (!list->next)
+	min_moves = 2147483647;
+    b_index = 0;
+	while (b)
 	{
-		if (num > *(int *)(list->data))
-			return (0);
-		return (1);
+        a_index = find_index(a, *((int *)(b->data)));
+        if (b_index <= (b_size / 2))
+            current_moves = b_index;
+		else
+            current_moves = b_size - b_index;
+		if (a_index <= (a_size / 2))
+            current_moves += a_index;
+		else
+            current_moves += a_size - a_index;
+		if (current_moves < min_moves)
+		{
+            min_moves = current_moves;
+            best_choice = b_index;
+		}
+		b_index++;
+		b = b->next;
 	}
-	prec = *((int *)(ft_lstlast(list)->data));
-	index = 0;
-	while (list)
-	{
-		succ = *((int *)(list->data));
-		if ((prec > num && (num > succ || succ == b_max)) || (num > succ && (prec > num || prec == b_min)))
-			break ;
-		prec = succ;
-		index++;
-		list = list->next;
-	}
-	return (index);
+	return (best_choice);
 }
 
-void insert_in_b(t_list **a, t_list **b, int size)
+/*static void print_list(t_list *list)
 {
-	int index;
-	int b_max;
-	int b_min;
+	while (list)
+	{
+		printf("%d\n", *((int *)(list->data)));
+		list = list->next;
+	}
+}*/
 
-	b_max = find_max(*b);
-	b_min = find_min(*b);
-	index = find_index_2(*b, *((int *)((*a)->data)), b_max, b_min);
-	if (index <= (size / 2))
-		exec_and_display("rb", NULL, b, index - 1);
-	else
-		exec_and_display("rrb", NULL, b, (size - index));
-	exec_and_display("pb", a, b, 1);
-	if (index <= (size / 2) && index != 0)
-			exec_and_display("sb", NULL, b, 1);
+void push_back_to_a(t_list **a, t_list **b, int a_size, int b_size)
+{
+	int index_b;
+	int index_a;
+
+	while (*b)
+	{
+        index_b = find_lowest(*a, *b, a_size, b_size);
+        if (index_b <= (b_size / 2))
+            exec_and_display("rb", NULL, b, index_b);
+        else
+            exec_and_display("rrb", NULL, b, (b_size - index_b));
+        index_a = find_index(*a, *((int *) ((*b)->data)));
+        if (index_a <= (a_size / 2))
+            exec_and_display("ra", a, NULL, index_a - 1);
+        else
+            exec_and_display("rra", a, NULL, (a_size - index_a));
+        exec_and_display("pa", a, b, 1);
+		if (index_a && index_a <= (a_size / 2))
+			exec_and_display("sa", a, NULL, 1);
+        a_size++;
+        b_size--;
+    }
 }
 
 void sort_n(t_list **a, t_list **b)
 {
-	int median;
+	static int *median;
+	int last_sorted;
 	int a_size;
 	int b_size;
 	int quicker;
-
-	median = (find_max(*a) + find_min(*a)) / 2;
+	
+	if (median)
+	{
+		last_sorted = *median;
+		*median = (find_max(*a) + (*median + 1)) / 2;
+	}
+	else
+	{
+		last_sorted = -2147483648;
+		median = malloc(sizeof(int *));
+		*median = (find_max(*a) + find_min(*a)) / 2;
+	}
 	a_size = ft_lstsize(*a);
 	b_size = ft_lstsize(*b);
 
 	while (1)
 	{
-		quicker = find_quicker(*a, median, a_size);
+		quicker = find_quicker(*a, *median, last_sorted, a_size);
 		if (quicker == -1)
 			break ;
 		if (quicker <= a_size / 2)
 			exec_and_display("ra", a, NULL, quicker);
 		else
 			exec_and_display("rra", a, NULL, a_size - quicker);
-		insert_in_b(a, b, b_size++);
+		exec_and_display("pb", a, b, 1);
 		a_size--;
+		b_size++;
 	}
+	if (last_sorted == -2147483648)
+	{
+		exec_and_display("pa", a, b, 1);
+		b_size--;
+		a_size++;
+	}
+	push_back_to_a(a, b, a_size, b_size);
 }
