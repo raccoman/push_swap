@@ -1,4 +1,4 @@
-#include "headers/push_swap.h"
+#include "./headers/push_swap.h"
 
 void	finish_sorting(t_list *a, int size, int *median)
 {
@@ -6,6 +6,7 @@ void	finish_sorting(t_list *a, int size, int *median)
 
 	if (size > 5)
 		free(median);
+	median++;
 	min_index = find_index_of_min(a);
 	if (min_index <= size / 2)
 		execute("ra", &a, NULL, min_index);

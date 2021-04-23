@@ -8,6 +8,8 @@ SRCS	=	ft_atol.c \
 			ft_strdup.c \
 			ft_strlen.c \
 			ft_strcmp.c \
+			ft_split.c \
+			ft_strlcpy.c \
 			ft_lstadd_back.c \
 			ft_lstadd_front.c \
 			ft_lstlast.c \

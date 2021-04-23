@@ -48,7 +48,7 @@ int	main(int argc, char *argv[])
 	free(tmp);
 	if (!check_cmds(cmds))
 	{
-		clear_and_error(list, cmds);
+		clear_and_error(list, cmds, argc, argv);
 		return (1);
 	}
 	execute_cmds(list, cmds);

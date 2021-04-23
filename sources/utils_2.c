@@ -1,5 +1,16 @@
 #include "push_swap.h"
 
+int	count_args(char **argv, int *i)
+{
+	int	count;
+
+	count = 0;
+	while (argv[count])
+		count++;
+	(*i)--;
+	return (count);
+}
+
 t_list	*parse_args(int argc, char *argv[])
 {
 	t_list	*list;
@@ -7,8 +18,13 @@ t_list	*parse_args(int argc, char *argv[])
 	int		*data;
 	long	tmp;
 
-	list = NULL;
 	i = 0;
+	if (argc == 2)
+	{
+		argv = ft_split(argv[1], ' ');
+		argc = count_args(argv, &i);
+	}
+	list = NULL;
 	while (++i < argc)
 	{
 		if (ft_is_num(argv[i]) && ft_is_int(ft_atol(argv[i])))
@@ -19,9 +35,9 @@ t_list	*parse_args(int argc, char *argv[])
 			ft_lstadd_back(&list, ft_lstnew(data));
 		}
 		else
-			return (clear_and_error(list, NULL));
+			return (clear_and_error(list, NULL, argc, argv));
 	}
-	return (check_duplicates(list));
+	return (check_duplicates(list, argc, argv));
 }
 
 void	dispatcher(char *cmd, t_list **a, t_list **b)

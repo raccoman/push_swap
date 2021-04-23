@@ -23,10 +23,10 @@ void	push(t_list **list1, t_list **list_2);
 void	rotate(t_list **list);
 void	rev_rotate(t_list **list);
 
-void	*clear_and_error(t_list *list, t_list *list2);
+void	*clear_and_error(t_list *list, t_list *list2, int argc, char **argv);
 int		is_cmd(char *cmd);
 int		check_cmds(t_list *cmds);
-t_list	*check_duplicates(t_list *list);
+t_list	*check_duplicates(t_list *list, int argc, char **argv);
 int		check_sorted(t_list *a);
 
 t_list	*parse_args(int argc, char *argv[]);

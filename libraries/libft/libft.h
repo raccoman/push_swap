@@ -36,5 +36,7 @@ int		ft_gnl(int fd, char **line);
 int		ft_strlen(const char *str);
 char	*ft_strdup(const char *str);
 int		ft_strcmp(char *str1, char *str2);
+char	**ft_split(char const *str, char del);
+int		ft_strlcpy(char *dest, const char *src, int size);
 
 #endif

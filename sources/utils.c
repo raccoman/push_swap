@@ -12,11 +12,20 @@
 
 #include "push_swap.h"
 
-void	*clear_and_error(t_list *list, t_list *list2)
+void	*clear_and_error(t_list *list, t_list *list2, int argc, char **argv)
 {
+	int	i;
+
 	write(2, "Error\n", 6);
 	ft_lstclear(&list);
 	ft_lstclear(&list2);
+	if (argc == 2)
+	{
+		i = 0;
+		while (argv[i++])
+			free(argv[i - 1]);
+		free(argv);
+	}
 	return (NULL);
 }
 
@@ -41,10 +50,11 @@ int	check_cmds(t_list *cmds)
 	return (1);
 }
 
-t_list	*check_duplicates(t_list *list)
+t_list	*check_duplicates(t_list *list, int argc, char **argv)
 {
 	t_list	*tmp;
 	t_list	*safe;
+	int		i;
 
 	safe = list;
 	while (list)
@@ -53,10 +63,17 @@ t_list	*check_duplicates(t_list *list)
 		while (tmp)
 		{
 			if (*((int *)(list->data)) == *((int *)(tmp->data)))
-				return (clear_and_error(safe, NULL));
+				return (clear_and_error(safe, NULL, argc, argv));
 			tmp = tmp->next;
 		}
 		list = list->next;
+	}
+	if (argc == 2)
+	{
+		i = 0;
+		while (argv[i++])
+			free(argv[i - 1]);
+		free(argv);
 	}
 	return (safe);
 }
