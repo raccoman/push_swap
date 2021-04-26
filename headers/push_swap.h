@@ -30,6 +30,8 @@ t_list	*check_duplicates(t_list *list, int argc, char **argv);
 int		check_sorted(t_list *a);
 
 t_list	*parse_args(int argc, char *argv[]);
+int		count_args(char **argv, int *i);
+int		is_flag(char *arg, int *flags);
 void	dispatcher(char *cmd, t_list **a, t_list **b);
 void	execute(char *cmd, t_list **a, t_list **b, int times);
 

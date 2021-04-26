@@ -11,6 +11,17 @@ int	count_args(char **argv, int *i)
 	return (count);
 }
 
+int	is_flag(char *arg, int *flags)
+{
+	if (!ft_strcmp(arg, "-v"))
+		*flags = 1;
+	else if (!ft_strcmp(arg, "-c"))
+		flags[1] = 1;
+	else
+		return (0);
+	return (1);
+}
+
 t_list	*parse_args(int argc, char *argv[])
 {
 	t_list	*list;

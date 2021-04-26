@@ -10,6 +10,8 @@ SRCS	=	ft_atol.c \
 			ft_strcmp.c \
 			ft_split.c \
 			ft_strlcpy.c \
+			ft_putnbr.c \
+			ft_printf.c \
 			ft_lstadd_back.c \
 			ft_lstadd_front.c \
 			ft_lstlast.c \

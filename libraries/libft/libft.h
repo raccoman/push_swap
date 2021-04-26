@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdarg.h>
 
 typedef struct s_list
 {
@@ -38,5 +39,7 @@ char	*ft_strdup(const char *str);
 int		ft_strcmp(char *str1, char *str2);
 char	**ft_split(char const *str, char del);
 int		ft_strlcpy(char *dest, const char *src, int size);
+void	ft_putnbr(long n);
+int		ft_printf(const char *str, ...);
 
 #endif

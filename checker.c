@@ -12,24 +12,88 @@
 
 #include "headers/push_swap.h"
 
-void	execute_cmds(t_list *a, t_list *cmds)
+void	print_lists(t_list *a, t_list *b)
+{
+	ft_printf("\tA\tB\n\t-\t-\n");
+	while (a || b)
+	{
+		if (a && b)
+			ft_printf("\t%d\t%d\n", *((int *)(a->data)), *((int *)(b->data)));
+		else if (a)
+			ft_printf("\t%d\n", *((int *)(a->data)));
+		else
+			ft_printf("\t\t%d\n", *((int *)(b->data)));
+		if (a)
+			a = a->next;
+		if (b)
+			b = b->next;
+	}
+}
+
+void	print_cmd(char *cmd)
+{
+	int	len;
+
+	len = ft_strlen(cmd);
+	if (cmd[len - 1] == 'a')
+		ft_printf("\033[0;35m%s\033[0m\n", cmd);
+	else
+		ft_printf("\033[0;36m%s\033[0m\n", cmd);
+}
+
+void	execute_cmds(t_list *a, t_list *cmds, int *flags)
 {
 	t_list	*b;
 
 	b = NULL;
+	if (*flags)
+		print_lists(a, b);
 	while (cmds)
 	{
+		if (flags[1])
+			print_cmd(cmds->data);
 		dispatcher(cmds->data, &a, &b);
 		cmds = cmds->next;
+		if (*flags)
+			print_lists(a, b);
 	}
 	if (b || !check_sorted(a))
 	{
 		if (b)
 			ft_lstclear(&b);
-		write(1, "KO\n", 3);
+		ft_printf("\033[0;31mKO\033[0m\n");
 	}
 	else
-		write(1, "OK\n", 3);
+		ft_printf("\033[0;32mOK\033[0m\n");
+}
+
+t_list	*parse_args_flags(int argc, char *argv[], int *flags)
+{
+	t_list	*list;
+	int		i;
+	int		*data;
+	long	tmp;
+
+	i = 0;
+	if (argc == 2)
+	{
+		argv = ft_split(argv[1], ' ');
+		argc = count_args(argv, &i);
+	}
+	list = NULL;
+	while (++i < argc)
+	{
+		if (ft_is_num(argv[i]) && ft_is_int(ft_atol(argv[i])))
+		{
+			tmp = ft_atol(argv[i]);
+			data = malloc(sizeof(int));
+			*data = (int)tmp;
+			ft_lstadd_back(&list, ft_lstnew(data));
+		}
+		else if (!is_flag(argv[i], flags))
+			return (clear_and_error(list, NULL, argc, argv));
+	}
+	return (check_duplicates(list, argc, argv));
 }
 
 int	main(int argc, char *argv[])
@@ -37,10 +101,13 @@ int	main(int argc, char *argv[])
 	t_list	*list;
 	t_list	*cmds;
 	char	*tmp;
+	int		flags[2];
 
 	if (argc == 1)
 		return (1);
-	list = parse_args(argc, argv);
+	flags[0] = 0;
+	flags[1] = 0;
+	list = parse_args_flags(argc, argv, flags);
 	if (!list)
 		return (1);
 	while (ft_gnl(0, &tmp) > 0)
@@ -51,7 +118,7 @@ int	main(int argc, char *argv[])
 		clear_and_error(list, cmds, argc, argv);
 		return (1);
 	}
-	execute_cmds(list, cmds);
+	execute_cmds(list, cmds, flags);
 	ft_lstclear(&cmds);
 	ft_lstclear(&list);
 }
