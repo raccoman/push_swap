@@ -14,20 +14,21 @@
 
 void	print_lists(t_list *a, t_list *b)
 {
-	ft_printf("\tA\tB\n\t-\t-\n");
+	printf("%7s    │%5s\n  ─────────│─────────\n", "A", "B");
 	while (a || b)
 	{
 		if (a && b)
-			ft_printf("\t%d\t%d\n", *((int *)(a->data)), *((int *)(b->data)));
+			printf("%9d  │%7d\n", *((int *)(a->data)), *((int *)(b->data)));
 		else if (a)
-			ft_printf("\t%d\n", *((int *)(a->data)));
+			printf("%9d  │\n", *((int *)(a->data)));
 		else
-			ft_printf("\t\t%d\n", *((int *)(b->data)));
+			printf("      |%7d\n", *((int *)(b->data)));
 		if (a)
 			a = a->next;
 		if (b)
 			b = b->next;
 	}
+	printf("\n");
 }
 
 void	print_cmd(char *cmd)
@@ -36,28 +37,30 @@ void	print_cmd(char *cmd)
 
 	len = ft_strlen(cmd);
 	if (cmd[len - 1] == 'a')
-		ft_printf("\033[0;35m%s\033[0m\n", cmd);
+		ft_printf("  \033[0;35m%s\033[0m\n", cmd);
 	else
-		ft_printf("\033[0;36m%s\033[0m\n", cmd);
+		ft_printf("  \033[0;36m%s\033[0m\n", cmd);
 }
 
-void	execute_cmds(t_list *a, t_list *cmds, int *flags)
+void	execute_cmds(t_list **a, t_list *cmds, int *flags)
 {
 	t_list	*b;
 
 	b = NULL;
 	if (*flags)
-		print_lists(a, b);
+		print_lists(*a, b);
 	while (cmds)
 	{
 		if (flags[1])
 			print_cmd(cmds->data);
-		dispatcher(cmds->data, &a, &b);
+		dispatcher(cmds->data, a, &b);
 		cmds = cmds->next;
 		if (*flags)
-			print_lists(a, b);
+			print_lists(*a, b);
+		if (flags[2] && cmds)
+			sleep(4);
 	}
-	if (b || !check_sorted(a))
+	if (b || !check_sorted(*a))
 	{
 		if (b)
 			ft_lstclear(&b);
@@ -101,12 +104,13 @@ int	main(int argc, char *argv[])
 	t_list	*list;
 	t_list	*cmds;
 	char	*tmp;
-	int		flags[2];
+	int		flags[3];
 
 	if (argc == 1)
 		return (1);
 	flags[0] = 0;
 	flags[1] = 0;
+	flags[2] = 0;
 	list = parse_args_flags(argc, argv, flags);
 	if (!list)
 		return (1);
@@ -118,7 +122,8 @@ int	main(int argc, char *argv[])
 		clear_and_error(list, cmds, argc, argv);
 		return (1);
 	}
-	execute_cmds(list, cmds, flags);
+	execute_cmds(&list, cmds, flags);
+	print_moves(cmds);
 	ft_lstclear(&cmds);
 	ft_lstclear(&list);
 }

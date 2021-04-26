@@ -44,6 +44,7 @@ FILES =			operations.c \
 				sort_n_utils.c \
 				utils.c \
 				utils_2.c \
+				bonus.c \
 
 #Srcs
 SRCS =			$(foreach FILE, $(FILES), $(shell find $(SOURCES_DIR) -name $(FILE)))

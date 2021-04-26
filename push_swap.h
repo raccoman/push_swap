@@ -15,7 +15,6 @@
 
 # include <unistd.h>
 # include <stdio.h>
-# include <time.h>
 
 # include "../libraries/libft/libft.h"
 
@@ -51,6 +50,5 @@ int		find_max(t_list *list);
 int		find_min(t_list *list);
 void	insert_sorted(t_list **a, t_list **b, int size);
 void	push_back_to_a(t_list **a, t_list **b, int b_size);
-void    print_moves(t_list *list);
 
 #endif

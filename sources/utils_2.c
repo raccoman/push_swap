@@ -17,6 +17,8 @@ int	is_flag(char *arg, int *flags)
 		*flags = 1;
 	else if (!ft_strcmp(arg, "-c"))
 		flags[1] = 1;
+	else if (!ft_strcmp(arg, "-d"))
+		flags[2] = 1;
 	else
 		return (0);
 	return (1);
