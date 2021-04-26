@@ -104,13 +104,11 @@ int	main(int argc, char *argv[])
 	t_list	*list;
 	t_list	*cmds;
 	char	*tmp;
-	int		flags[3];
+	int		flags[4];
 
 	if (argc == 1)
 		return (1);
-	flags[0] = 0;
-	flags[1] = 0;
-	flags[2] = 0;
+	reset_flags(flags);
 	list = parse_args_flags(argc, argv, flags);
 	if (!list)
 		return (1);

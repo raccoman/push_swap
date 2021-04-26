@@ -51,6 +51,7 @@ int		find_max(t_list *list);
 int		find_min(t_list *list);
 void	insert_sorted(t_list **a, t_list **b, int size);
 void	push_back_to_a(t_list **a, t_list **b, int b_size);
-void    print_moves(t_list *list);
+void	print_moves(t_list *list);
+void	reset_flags(int *flags);
 
 #endif
