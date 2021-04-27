@@ -42,26 +42,30 @@ void	print_cmd(char *cmd)
 		ft_printf("  \033[0;36m%s\033[0m\n", cmd);
 }
 
-void	execute_cmds(t_list *a, t_list *cmds, int *flags)
+void	execute_cmds(t_list **a, t_list *cmds, int *flags)
 {
 	t_list	*b;
 
 	b = NULL;
 	if (*flags)
-		print_lists(a, b);
+		print_lists(*a, b);
 	while (cmds)
 	{
 		if (flags[1])
 			print_cmd(cmds->data);
-		dispatcher(cmds->data, &a, &b);
+		dispatcher(cmds->data, a, &b);
 		cmds = cmds->next;
 		if (*flags)
-			print_lists(a, b);
+			print_lists(*a, b);
 		if (flags[2] && cmds)
 			sleep(4);
 	}
-	if (b || !check_sorted(a))
+	if (b || !check_sorted(*a))
+	{
+		if (b)
+			ft_lstclear(&b);
 		ft_printf("\033[0;31mKO\033[0m\n");
+	}
 	else
 		ft_printf("\033[0;32mOK\033[0m\n");
 }
@@ -117,7 +121,7 @@ int	main(int argc, char *argv[])
 		clear_and_error(list, cmds, argc, argv);
 		return (1);
 	}
-	execute_cmds(list, cmds, flags);
+	execute_cmds(&list, cmds, flags);
 	if (flags[3])
 		print_moves(cmds);
 	ft_lstclear(&cmds);
