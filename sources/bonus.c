@@ -1,17 +1,17 @@
 #include "push_swap.h"
 
-int count_moves(char *move, t_list *list)
+int	count_moves(char *move, t_list *list)
 {
-	int c;
+	int	count;
 
-	c = 0;
+	count = 0;
 	while (list)
 	{
 		if (!ft_strcmp(list->data, move))
-			c++;
+			count++;
 		list = list->next;
 	}
-	return (c);
+	return (count);
 }
 
 void	print_moves(t_list *list)
@@ -34,8 +34,9 @@ void	print_moves(t_list *list)
 
 void	reset_flags(int *flags)
 {
-	flags[0] = 0;
-	flags[1] = 0;
-	flags[2] = 0;
-	flags[3] = 0;
+	int	i;
+
+	i = -1;
+	while (++i < 4)
+		flags[i] = 0;
 }
